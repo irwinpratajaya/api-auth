@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models')
 var controllers = require('../controllers/controllers')
+var auth = require('../helper/authorize')
 const crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
@@ -16,7 +17,7 @@ router.post('/signup', controllers.signup);
 router.post('/signin', controllers.signin)
 
 // menampilkan seluruh data user
-router.get('/users', controllers.get_users);
+router.get('/users', auth.Admin, controllers.get_users);
 
 // menampilkan data user berdasarkan id
 router.get('/users/:id', controllers.get_user_id);

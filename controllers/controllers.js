@@ -4,7 +4,6 @@ var jwt = require('jsonwebtoken');
 // var decoded = jwt.verify(req.headers.authentication, 'shhhhh');
 
 var signup = function(req, res, next) {
-  var decoded = jwt.verify(req.headers.authentication, 'shhhhh');
   models.User.create({
     name: req.body.name,
     email: req.body.email,
@@ -17,7 +16,6 @@ var signup = function(req, res, next) {
 }
 
 var signin = function(req, res, next) {
-  var decoded = jwt.verify(req.headers.authentication, 'shhhhh');
   models.User.findOne({
     where: {
       email: req.body.email
@@ -30,7 +28,7 @@ var signin = function(req, res, next) {
                        .digest('hex')
       if(user.password == hmac) {
         res.send(token)
-        // console.log(token);
+        console.log(token);
       }
     } else {
       res.send(`wrong email or password`)
@@ -38,17 +36,23 @@ var signin = function(req, res, next) {
   })
 }
 
-var get_users = function(req, res, next) {
-  var decoded = jwt.verify(req.headers.authentication, 'shhhhh');
-  // res.send(decoded)
-  if(decoded.role == "admin") {
-    models.User.findAll().then(function(results) {
-      // console.log(results);
-      res.send(results)
-    })
-  } else {
-    res.send(`you are not authorized to access data as a user`)
-  }
+// var get_users = function(req, res, next) {
+//   var decoded = jwt.verify(req.headers.authentication, 'shhhhh');
+//   // res.send(decoded)
+//   if(decoded.role == "admin") {
+//     models.User.findAll().then(function(results) {
+//       // console.loge(results);
+//       res.send(results)
+//     })
+//   } else {
+//     res.send(`you are not authorized to access data as a user`)
+//   }
+// }
+
+var get_users = function(req,res) {
+  models.User.findAll().then(function(result) {
+    res.send(result)
+  })
 }
 
 var get_user_id = function(req, res, next) {
